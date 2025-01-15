@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "451193137837",
+    "project_id": "evenly-project",
+    "storage_bucket": "evenly-project.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:451193137837:android:df47673d0643c5ff7af424",
+        "android_client_info": {
+          "package_name": "edu.icet.evenly"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQcnWxsYHqcW8MBvpMnC-F-EeLHrxm0OQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

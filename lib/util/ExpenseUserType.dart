@@ -1,0 +1,3 @@
+enum ExpenseUserType {
+  PAID,OWED
+}
