@@ -44,7 +44,7 @@ class _SignupState extends State<Signup> {
     );
   }
 
-  Future<void> _signUp() async {
+  Future<void> signUp() async {
     try {
       if (name.isEmpty || email.isEmpty || password.isEmpty) {
         _showAlert("Incomplete Information", "Please fill all the fields.");
@@ -223,7 +223,7 @@ class _SignupState extends State<Signup> {
                       width: 200,
                       height: 40,
                       child: ElevatedButton(
-                        onPressed: _signUp,
+                        onPressed: signUp,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue,
                           shape: RoundedRectangleBorder(

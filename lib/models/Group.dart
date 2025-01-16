@@ -25,4 +25,14 @@ class Group {
   String toString() {
     return 'Group{id: $id, name: $name, admin: $admin, members: $members}';
   }
+
+  factory Group.fromJson(Map<dynamic, dynamic> json) {
+    return Group(
+      id: json['id'] ?? 0, // Provide default values if needed
+      name: json['name'] ?? '',
+      admin: json['admin'] ?? '',
+      members: json['members'] ?? '',
+    );
+  }
+
 }

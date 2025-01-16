@@ -43,7 +43,7 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Future<void> _login() async {
+  Future<void> login() async {
     // try {
     //   if (email.isEmpty || password.isEmpty) {
     //     _showAlert("Incomplete Information", "Please fill all the fields.");
@@ -202,7 +202,7 @@ class _LoginState extends State<Login> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  onPressed: _login,
+                  onPressed: login,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     shape: RoundedRectangleBorder(
