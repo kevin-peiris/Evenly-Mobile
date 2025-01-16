@@ -47,8 +47,7 @@ class DefaultFirebaseOptions {
       projectId: 'evenly-project',
       authDomain: 'evenly-project.firebaseapp.com',
       storageBucket: 'evenly-project.firebasestorage.app',
-      databaseURL:
-          'https://evenly-project-default-rtdb.asia-southeast1.firebasedatabase.app');
+    databaseURL: 'https://evenly-project-default-rtdb.asia-southeast1.firebasedatabase.app');
 
   static const FirebaseOptions android = FirebaseOptions(
       apiKey: 'AIzaSyDQcnWxsYHqcW8MBvpMnC-F-EeLHrxm0OQ',
@@ -56,8 +55,7 @@ class DefaultFirebaseOptions {
       messagingSenderId: '451193137837',
       projectId: 'evenly-project',
       storageBucket: 'evenly-project.firebasestorage.app',
-      databaseURL:
-          'https://evenly-project-default-rtdb.asia-southeast1.firebasedatabase.app');
+    databaseURL: 'https://evenly-project-default-rtdb.asia-southeast1.firebasedatabase.app');
 
   static const FirebaseOptions ios = FirebaseOptions(
       apiKey: 'AIzaSyAVmk9DbHOlCBJnadBiOmbrckbJPX2MLpI',
@@ -66,8 +64,7 @@ class DefaultFirebaseOptions {
       projectId: 'evenly-project',
       storageBucket: 'evenly-project.firebasestorage.app',
       iosBundleId: 'edu.icet.evenly',
-      databaseURL:
-          'https://evenly-project-default-rtdb.asia-southeast1.firebasedatabase.app');
+    databaseURL: 'https://evenly-project-default-rtdb.asia-southeast1.firebasedatabase.app');
 
   static const FirebaseOptions macos = FirebaseOptions(
       apiKey: 'AIzaSyAVmk9DbHOlCBJnadBiOmbrckbJPX2MLpI',
@@ -76,8 +73,8 @@ class DefaultFirebaseOptions {
       projectId: 'evenly-project',
       storageBucket: 'evenly-project.firebasestorage.app',
       iosBundleId: 'edu.icet.evenly',
-      databaseURL:
-          'https://evenly-project-default-rtdb.asia-southeast1.firebasedatabase.app');
+    databaseURL: 'https://evenly-project-default-rtdb.asia-southeast1.firebasedatabase.app');
+
 
   static const FirebaseOptions windows = FirebaseOptions(
       apiKey: 'AIzaSyARCjxiRmxYg0ou8UZB9iBbaXZU9bgM9zo',
@@ -86,6 +83,5 @@ class DefaultFirebaseOptions {
       projectId: 'evenly-project',
       authDomain: 'evenly-project.firebaseapp.com',
       storageBucket: 'evenly-project.firebasestorage.app',
-      databaseURL:
-          'https://evenly-project-default-rtdb.asia-southeast1.firebasedatabase.app');
+    databaseURL: 'https://evenly-project-default-rtdb.asia-southeast1.firebasedatabase.app');
 }

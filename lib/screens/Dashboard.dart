@@ -20,24 +20,60 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    // Dynamically create the list of screens
     final List<Widget> screens = [
-
       Scaffold(
         body: Padding(
-          padding: EdgeInsets.all(10),
+          padding: EdgeInsets.all(20),
           child: Column(
-              children: [
-                Text(
-                  'Welcome, ${widget.loginUser.name}!',
-                  style: const TextStyle(fontSize: 24),
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Welcome, ${widget.loginUser.name}!',
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.grey,
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 10),
+              Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Colors.grey.shade300,
+                      width: 1,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 10,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _buildBalanceCard('Total Balance', '-\$9,400.00',
+                          Colors.red, Colors.red.shade50),
+                      const SizedBox(height: 10),
+                      _buildBalanceCard('You Owe', '\$31,900.00', Colors.red,
+                          Colors.red.shade50),
+                      const SizedBox(height: 10),
+                      _buildBalanceCard('You Are Owed', '\$22,500.00',
+                          Colors.green, Colors.green.shade50),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
+              )
+            ],
+          ),
         ),
-
       ),
-
       const Center(
         child: Text(
           'Profile',
@@ -90,13 +126,17 @@ class _DashboardState extends State<Dashboard> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Define action for the button
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: const Text('Action'),
-              content: const Text('Floating Action Button Pressed!'),
+              title: const Text('Create a new Group'),
+              content: const Text(
+                  'Create Groups and add Friends to share Expenses.'),
               actions: [
+                TextButton(
+                  onPressed: () {},
+                  child: const Text('Create'),
+                ),
                 TextButton(
                   onPressed: () => Navigator.pop(context),
                   child: const Text('Close'),
@@ -110,6 +150,33 @@ class _DashboardState extends State<Dashboard> {
           Icons.people,
           color: Colors.white,
         ),
+      ),
+    );
+  }
+
+  Widget _buildBalanceCard(
+      String title, String amount, Color color, Color bgColor) {
+
+    return Container(
+      width: double.infinity,
+      height: 100,
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(5),
+        border: Border.all(color: color),
+      ),
+      child: Column(
+        children: [
+          Text(
+            '$title $amount',
+            style: TextStyle(
+              color: color,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+          ),
+        ],
       ),
     );
   }
