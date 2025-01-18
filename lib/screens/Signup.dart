@@ -57,19 +57,8 @@ class _SignupState extends State<Signup> {
         return;
       }
 
-      var snapshot = await db.get();
-
-      if (snapshot.exists) {
-        final Map<dynamic, dynamic> usersData = snapshot.value as Map<dynamic, dynamic>;
-        final List<User> users = usersData.values.map((data) {
-          return User.fromJson(data);
-        }).toList();
-
-        id=users.last.id+1;
-      }
-
       final user = {
-        "id":id,
+        "id":DateTime.now().millisecondsSinceEpoch,
         "name": name,
         "email": email,
         "password": password,

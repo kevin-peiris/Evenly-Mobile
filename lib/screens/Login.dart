@@ -44,51 +44,51 @@ class _LoginState extends State<Login> {
   }
 
   Future<void> login() async {
-    // try {
-    //   if (email.isEmpty || password.isEmpty) {
-    //     _showAlert("Incomplete Information", "Please fill all the fields.");
-    //     return;
-    //   }
-    //
-    //   final snapshot = await db.get();
-    //
-    //   if (!snapshot.exists) {
-    //     _showAlert("Error", "No users found.");
-    //     return;
-    //   }
-    //
-    //   final Map<dynamic, dynamic> usersData = snapshot.value as Map<dynamic, dynamic>;
-    //   final List<User> users = usersData.values.map((data) {
-    //     return User.fromJson(data);
-    //   }).toList();
-    //
-    //   //bool userFound = false;
-    //   User? userFound;
-    //
-    //   for (var user in users) {
-    //     if(user.email == email.trim() && user.password == password.trim()){
-    //       userFound=user;
-    //     }
-    //   }
-    //
-    //   if (userFound!=null) {
-    //     _showAlert("Success", "Logged in successfully!");
-    //     print('Success, Logged in successfully!');
+    try {
+      if (email.isEmpty || password.isEmpty) {
+        _showAlert("Incomplete Information", "Please fill all the fields.");
+        return;
+      }
+
+      final snapshot = await db.get();
+
+      if (!snapshot.exists) {
+        _showAlert("Error", "No users found.");
+        return;
+      }
+
+      final Map<dynamic, dynamic> usersData = snapshot.value as Map<dynamic, dynamic>;
+      final List<User> users = usersData.values.map((data) {
+        return User.fromJson(data);
+      }).toList();
+
+      //bool userFound = false;
+      User? userFound;
+
+      for (var user in users) {
+        if(user.email == email.trim() && user.password == password.trim()){
+          userFound=user;
+        }
+      }
+
+      if (userFound!=null) {
+        _showAlert("Success", "Logged in successfully!");
+        print('Success, Logged in successfully!');
         Navigator.pushNamed(
           context,
           AppRoutes.dashboard,
-          //arguments: userFound,
-          arguments: new User(id: 101, name: 'name', email: 'email', password: 'password')
+          arguments: userFound,
+          // arguments: new User(id: 101, name: 'name', email: 'email', password: 'password')
         );
 
-    //   } else {
-    //     _showAlert("Error", "Invalid email or password.");
-    //     print('Error, Invalid email or password.');
-    //   }
-    // } catch (error) {
-    //   _showAlert("Error", "Failed to login: $error");
-    //   print('Error, Failed to login: $error');
-    // }
+      } else {
+        _showAlert("Error", "Invalid email or password.");
+        print('Error, Invalid email or password.');
+      }
+    } catch (error) {
+      _showAlert("Error", "Failed to login: $error");
+      print('Error, Failed to login: $error');
+    }
   }
 
   @override

@@ -16,6 +16,15 @@ class User {
     return 'User{id: $id, name: $name, email: $email, password: $password}';
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'email': email,
+      'password': password,
+    };
+  }
+
   factory User.fromJson(Map<dynamic, dynamic> json) {
     return User(
       id: json['id'] ?? 0, // Provide default values if needed

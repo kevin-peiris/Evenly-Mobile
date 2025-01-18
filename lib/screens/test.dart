@@ -1,10 +1,129 @@
 import 'package:flutter/material.dart';
 import '../models/User.dart';
+import '../models/Group.dart'; // Assuming you have the Group model in this path.
 
-class Dashboard extends StatelessWidget {
+class Dashboard extends StatefulWidget {
   final User loginUser;
-
   const Dashboard({super.key, required this.loginUser});
+
+  @override
+  State<Dashboard> createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard> {
+  final TextEditingController _groupNameController = TextEditingController();
+  List<User> currentUsers = []; // Retrieved users to select as group members.
+  List<User> selectedMembers = []; // Members selected for the new group.
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    // Mock Firebase retrieval for demonstration
+    var userSnapshot = await db.child("users").get();
+
+    if (userSnapshot.exists) {
+      final Map<dynamic, dynamic> usersData =
+      userSnapshot.value as Map<dynamic, dynamic>;
+      final List<User> users = usersData.values.map((data) {
+        return User.fromJson(data);
+      }).toList();
+
+      setState(() {
+        currentUsers = users;
+      });
+    }
+  }
+
+  void createGroup() {
+    String groupName = _groupNameController.text.trim();
+    if (groupName.isEmpty || selectedMembers.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please provide a group name and members')),
+      );
+      return;
+    }
+
+    Group newGroup = Group(
+      id: DateTime.now().millisecondsSinceEpoch, // Unique ID
+      name: groupName,
+      admin: widget.loginUser,
+      members: selectedMembers,
+    );
+
+    // Add logic to save the group to your database here
+    print(newGroup);
+
+    Navigator.pop(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Group "$groupName" created successfully!')),
+    );
+  }
+
+  void showGroupCreationDialog() {
+    selectedMembers.clear(); // Clear previously selected members.
+    _groupNameController.clear(); // Clear the input field.
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Create a New Group'),
+        content: SizedBox(
+          height: 300,
+          child: Column(
+            children: [
+              // Group Name Input
+              TextField(
+                controller: _groupNameController,
+                decoration: const InputDecoration(
+                  labelText: 'Group Name',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // User Selection
+              Expanded(
+                child: ListView.builder(
+                  itemCount: currentUsers.length,
+                  itemBuilder: (context, index) {
+                    final user = currentUsers[index];
+                    return CheckboxListTile(
+                      title: Text(user.name),
+                      subtitle: Text(user.email), // Assuming User has an email.
+                      value: selectedMembers.contains(user),
+                      onChanged: (bool? isSelected) {
+                        setState(() {
+                          if (isSelected == true) {
+                            selectedMembers.add(user);
+                          } else {
+                            selectedMembers.remove(user);
+                          }
+                        });
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: createGroup,
+            child: const Text('Create'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,211 +142,16 @@ class Dashboard extends StatelessWidget {
         backgroundColor: Colors.transparent,
         iconTheme: const IconThemeData(color: Colors.blue),
       ),
-      body: Row(
-        children: [
-          // Groups Sidebar
-          Container(
-            width: 200,
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.blue),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'GROUPS',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                ...['Family', 'Office', 'Office Trip Nuwara']
-                    .map(
-                      (group) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.blue.shade100,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Text(
-                        group,
-                        style: const TextStyle(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-                    .toList(),
-              ],
-            ),
-          ),
-
-          // Dashboard Content
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Dashboard Heading
-                  const Text(
-                    'Dashboard',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Balance Cards
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _buildBalanceCard('Total Balance', '-\$9,400.00',
-                          Colors.red, Colors.red.shade50),
-                      _buildBalanceCard(
-                          'You Owe', '\$31,900.00', Colors.red, Colors.red.shade50),
-                      _buildBalanceCard('You Are Owed', '\$22,500.00',
-                          Colors.green, Colors.green.shade50),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-
-                  // You Owe Section
-                  const Text(
-                    'YOU OWE',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  _buildOweRow('Kevin Peiris', 'You owe \$7,200.00', Colors.red),
-                  _buildOweRow('Nadeeka Alwis', 'You owe \$14,000.00', Colors.red),
-                  const SizedBox(height: 20),
-
-                  // You Are Owed Section
-                  const Text(
-                    'YOU ARE OWED',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  _buildOweRow('Kamal Perera', 'owes you \$2,000.00', Colors.green),
-                  _buildOweRow('Namal Perera', 'owes you \$2,000.00', Colors.green),
-                  _buildOweRow('Rashmi Senanayake', 'owes you \$4,000.00',
-                      Colors.green),
-                  _buildOweRow('Mahesh Kumara', 'owes you \$3,800.00', Colors.green),
-                ],
-              ),
-            ),
-          ),
-
-          // Guide Section
-          Container(
-            width: 200,
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.blue),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Guide',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                ...[
-                  'Create Groups and add Friends to share Expenses.',
-                  'Track shared expenses and keep everyone informed.',
-                  'Easily settle balances among group members.',
-                  'Monitor payments made by group members in real time.',
-                  'Invite friends to join and collaborate on group expenses.',
-                ].map(
-                      (guide) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: Text(
-                      guide,
-                      style: const TextStyle(color: Colors.blue),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                  ),
-                  child: const Text('Create new Group'),
-                ),
-              ],
-            ),
-          ),
-        ],
+      body: Center(
+        child: const Text('Dashboard Content'),
       ),
-    );
-  }
-
-  Widget _buildBalanceCard(
-      String title, String amount, Color color, Color bgColor) {
-    return Container(
-      width: 150,
-      padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: color),
-      ),
-      child: Column(
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              color: color,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            amount,
-            style: TextStyle(
-              fontSize: 18,
-              color: color,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildOweRow(String name, String detail, Color color) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              '$name - $detail',
-              style: TextStyle(color: color),
-            ),
-          ),
-        ],
+      floatingActionButton: FloatingActionButton(
+        onPressed: showGroupCreationDialog,
+        backgroundColor: Colors.blue,
+        child: const Icon(
+          Icons.people,
+          color: Colors.white,
+        ),
       ),
     );
   }
